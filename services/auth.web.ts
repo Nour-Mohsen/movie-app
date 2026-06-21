@@ -1,4 +1,4 @@
-import { ID, OAuthProvider, type Models } from "appwrite";
+import { ID, type Models } from "appwrite";
 
 import { AuthError } from "@/utils/authError";
 import { getAppwriteErrorMessage, isExistingUserError } from "@/utils/appwriteError";
@@ -73,11 +73,7 @@ export const loginWithGoogle = async (): Promise<Models.User> => {
     typeof window !== "undefined" ? window.location.origin : "";
   const redirectUrl = `${origin}/login`;
 
-  account.createOAuth2Session(
-    OAuthProvider.Google,
-    redirectUrl,
-    redirectUrl,
-  );
+  account.createOAuth2Session("google", redirectUrl, redirectUrl);
 
   throw new AuthError("Redirecting to Google sign-in...");
 };
