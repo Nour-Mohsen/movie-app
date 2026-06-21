@@ -7,9 +7,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { Models } from "react-native-appwrite";
-
+import type { Models } from "@/services/auth";
 import {
+  completeOAuthIfNeeded,
   getCurrentUser,
   login,
   loginWithGoogle,
@@ -33,9 +33,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCurrentUser()
-      .then(setUser)
-      .finally(() => setLoading(false));
+    (async () => {
+      try {
+        const oauthUser = await completeOAuthIfNeeded();
+        if (oauthUser) {
+          setUser(oauthUser);
+          return;
+        }
+        setUser(await getCurrentUser());
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const handleLogin = useCallback(async (email: string, password: string) => {
