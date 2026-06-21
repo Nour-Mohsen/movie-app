@@ -4,6 +4,20 @@ import { AuthError } from "@/utils/authError";
 import { getAppwriteErrorMessage, isExistingUserError } from "@/utils/appwriteError";
 import { account } from "./appwrite.web";
 
+const getAccountAfterSession = async (): Promise<Models.User> => {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      return await account.get();
+    } catch {
+      await new Promise((resolve) => setTimeout(resolve, 80 * (attempt + 1)));
+    }
+  }
+
+  throw new AuthError(
+    "Signed in but could not load your profile. Please refresh the page.",
+  );
+};
+
 export const getCurrentUser = async (): Promise<Models.User | null> => {
   try {
     return await account.get();
@@ -31,7 +45,7 @@ export const register = async (
 
     try {
       await account.createEmailPasswordSession({ email, password });
-      return account.get();
+      return getAccountAfterSession();
     } catch {
       throw new AuthError(
         "An account with this email already exists. Sign in instead.",
@@ -41,7 +55,7 @@ export const register = async (
   }
 
   await account.createEmailPasswordSession({ email, password });
-  return account.get();
+  return getAccountAfterSession();
 };
 
 export const login = async (
@@ -50,7 +64,7 @@ export const login = async (
 ): Promise<Models.User> => {
   try {
     await account.createEmailPasswordSession({ email, password });
-    return account.get();
+    return getAccountAfterSession();
   } catch (error) {
     throw new AuthError(getAppwriteErrorMessage(error), "invalid_credentials");
   }
@@ -91,7 +105,7 @@ export const completeOAuthIfNeeded = async (): Promise<Models.User | null> => {
   try {
     await account.createSession({ userId, secret });
     window.history.replaceState({}, "", window.location.pathname);
-    return account.get();
+    return getAccountAfterSession();
   } catch (error) {
     throw new AuthError(getAppwriteErrorMessage(error));
   }

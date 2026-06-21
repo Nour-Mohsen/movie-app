@@ -1,5 +1,5 @@
 import { Link, useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -22,13 +22,19 @@ import { AuthError } from "@/utils/authError";
 
 const Login = () => {
   const router = useRouter();
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, user, loading: authLoading } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace("/");
+    }
+  }, [authLoading, user, router]);
 
   const handleLogin = async () => {
     if (!email.trim() || !password) {
@@ -41,7 +47,6 @@ const Login = () => {
 
     try {
       await login(email.trim(), password);
-      router.replace("/");
     } catch (error) {
       if (error instanceof AuthError) {
         setError(error.message);
@@ -61,8 +66,10 @@ const Login = () => {
 
     try {
       await loginWithGoogle();
-      router.replace("/");
     } catch (error) {
+      if (error instanceof AuthError && error.message.includes("Redirecting")) {
+        return;
+      }
       if (error instanceof AuthError) {
         setError(error.message);
       } else if (error instanceof Error) {

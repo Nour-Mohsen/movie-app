@@ -1,5 +1,5 @@
 import { Link, useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -21,13 +21,19 @@ import { images } from "@/constants/images";
 
 const Register = () => {
   const router = useRouter();
-  const { register } = useAuth();
+  const { register, user, loading: authLoading } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace("/");
+    }
+  }, [authLoading, user, router]);
 
   const handleRegister = async () => {
     if (!name.trim() || !email.trim() || password.length < 8) {
@@ -40,7 +46,6 @@ const Register = () => {
 
     try {
       await register(email.trim(), password, name.trim());
-      router.replace("/");
     } catch (error) {
       if (error instanceof AuthError) {
         setError(error.message);

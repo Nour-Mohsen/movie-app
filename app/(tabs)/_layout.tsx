@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { ImageBackground, Image, Text, View } from "react-native";
+import { ImageBackground, Image, Platform, Text, View } from "react-native";
 
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
@@ -31,6 +31,7 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
+        sceneStyle: { backgroundColor: "#030014" },
         tabBarItemStyle: {
           width: "100%",
           height: "100%",
@@ -41,7 +42,7 @@ export default function TabsLayout() {
           backgroundColor: "#0F0D23",
           borderRadius: 50,
           marginHorizontal: 20,
-          marginBottom: 36,
+          marginBottom: Platform.OS === "web" ? 12 : 36,
           height: 52,
           position: "absolute",
           overflow: "hidden",

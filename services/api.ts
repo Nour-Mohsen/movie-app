@@ -97,8 +97,7 @@ const getWebEmbedOrigin = (): string => {
 
 export const WEBVIEW_EMBED_ORIGIN = getWebEmbedOrigin();
 
-// YouTube requires a valid embed origin in WebView HTML to avoid error 152.
-export const getYouTubeTrailerEmbedHtml = (videoKey: string): string => {
+export const getYouTubeTrailerEmbedUrl = (videoKey: string): string => {
   const embedParams = new URLSearchParams({
     autoplay: "1",
     playsinline: "1",
@@ -108,7 +107,12 @@ export const getYouTubeTrailerEmbedHtml = (videoKey: string): string => {
     origin: WEBVIEW_EMBED_ORIGIN,
   });
 
-  const embedUrl = `https://www.youtube-nocookie.com/embed/${videoKey}?${embedParams.toString()}`;
+  return `https://www.youtube-nocookie.com/embed/${videoKey}?${embedParams.toString()}`;
+};
+
+// YouTube requires a valid embed origin in WebView HTML to avoid error 152.
+export const getYouTubeTrailerEmbedHtml = (videoKey: string): string => {
+  const embedUrl = getYouTubeTrailerEmbedUrl(videoKey);
 
   return `<!DOCTYPE html>
 <html>

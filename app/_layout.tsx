@@ -14,7 +14,11 @@ export default function RootLayout() {
       <AuthProvider>
         <StatusBar hidden={true} />
 
-        <Stack>
+        <Stack
+          screenOptions={{
+            contentStyle: { backgroundColor: "#030014" },
+          }}
+        >
           <Stack.Screen
             name="(tabs)"
             options={{
