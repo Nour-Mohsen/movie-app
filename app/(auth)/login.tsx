@@ -41,9 +41,11 @@ const Login = () => {
 
     try {
       await login(email.trim(), password);
-      router.replace("/(tabs)");
+      router.replace("/");
     } catch (error) {
       if (error instanceof AuthError) {
+        setError(error.message);
+      } else if (error instanceof Error) {
         setError(error.message);
       } else {
         setError("Invalid email or password.");
@@ -59,9 +61,11 @@ const Login = () => {
 
     try {
       await loginWithGoogle();
-      router.replace("/(tabs)");
+      router.replace("/");
     } catch (error) {
       if (error instanceof AuthError) {
+        setError(error.message);
+      } else if (error instanceof Error) {
         setError(error.message);
       } else {
         setError("Google sign-in failed. Please try again.");

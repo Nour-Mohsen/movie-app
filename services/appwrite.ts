@@ -10,9 +10,10 @@ import {
 import type { Models } from "react-native-appwrite";
 
 import { getMoviePosterUrl } from "@/utils/movie";
+import { getAppwritePlatform } from "@/utils/appwritePlatform";
 
 export const APPWRITE_ENDPOINT = "https://nyc.cloud.appwrite.io/v1";
-export const APPWRITE_PLATFORM = "com.anonymous.app";
+export const APPWRITE_PLATFORM = getAppwritePlatform();
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const METRICS_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;

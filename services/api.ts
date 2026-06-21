@@ -88,7 +88,14 @@ export const getYouTubeTrailerKey = (videos: MovieVideo[]): string | null => {
   return video?.key ?? null;
 };
 
-export const WEBVIEW_EMBED_ORIGIN = "https://com.anonymous.app";
+const getWebEmbedOrigin = (): string => {
+  if (typeof window !== "undefined" && window.location.origin) {
+    return window.location.origin;
+  }
+  return "https://com.anonymous.app";
+};
+
+export const WEBVIEW_EMBED_ORIGIN = getWebEmbedOrigin();
 
 // YouTube requires a valid embed origin in WebView HTML to avoid error 152.
 export const getYouTubeTrailerEmbedHtml = (videoKey: string): string => {
