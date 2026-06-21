@@ -1,8 +1,8 @@
-import { ID, type Models } from "appwrite";
+import { ID, OAuthProvider, type Models } from "appwrite";
 
 import { AuthError } from "@/utils/authError";
 import { getAppwriteErrorMessage, isExistingUserError } from "@/utils/appwriteError";
-import { account } from "@/services/appwrite";
+import { account } from "./appwrite.web";
 
 export const getCurrentUser = async (): Promise<Models.User | null> => {
   try {
@@ -73,7 +73,7 @@ export const loginWithGoogle = async (): Promise<Models.User> => {
     typeof window !== "undefined" ? window.location.origin : "";
   const redirectUrl = `${origin}/login`;
 
-  account.createOAuth2Session("google", redirectUrl, redirectUrl);
+  account.createOAuth2Session(OAuthProvider.Google, redirectUrl, redirectUrl);
 
   throw new AuthError("Redirecting to Google sign-in...");
 };
