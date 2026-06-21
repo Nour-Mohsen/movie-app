@@ -40,7 +40,7 @@ const Register = () => {
 
     try {
       await register(email.trim(), password, name.trim());
-      router.replace("/(tabs)");
+      router.replace("/");
     } catch (error) {
       if (error instanceof AuthError) {
         setError(error.message);
