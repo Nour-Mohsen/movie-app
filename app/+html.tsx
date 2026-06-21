@@ -19,9 +19,6 @@ export default function Root({ children }: PropsWithChildren) {
                 background-color: #030014;
                 height: 100%;
               }
-              body {
-                overflow: hidden;
-              }
             `,
           }}
         />

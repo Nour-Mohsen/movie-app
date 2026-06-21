@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  Platform,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
@@ -100,8 +101,16 @@ const MovieDetailsScreen = () => {
   }
 
   return (
-    <View className="bg-primary flex-1">
-      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+    <View
+      className="bg-primary flex-1"
+      style={Platform.OS === "web" ? { minHeight: "100%" } : undefined}
+    >
+      <ScrollView
+        className="flex-1"
+        style={Platform.OS === "web" ? { flex: 1, height: "100%" } : undefined}
+        contentContainerStyle={{ paddingBottom: 140 }}
+        showsVerticalScrollIndicator={false}
+      >
         <View>
           {isTrailerVisible && trailerVideoKey ? (
             <TrailerPlayer videoKey={trailerVideoKey} />

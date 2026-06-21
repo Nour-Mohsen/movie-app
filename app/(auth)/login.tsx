@@ -83,6 +83,15 @@ const Login = () => {
   };
 
   const busy = submitting || googleLoading;
+  const shouldRedirect = !authLoading && Boolean(user);
+
+  if (authLoading || shouldRedirect) {
+    return (
+      <SafeAreaView className="flex-1 bg-primary items-center justify-center">
+        <ActivityIndicator color="#AB8BFF" size="large" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-primary">
